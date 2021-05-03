@@ -32,6 +32,8 @@ Statistics is the foundation of Data Science and the concepts involved in statis
 
   - A simple demo to show the difference between the three common Regularization techniques. 
 
+<hr>
+
 ## [Understanding different statistical hypothesis tests](https://github.com/SuvanshVaid27/66-days-of-Data/blob/main/Day%2057%20-%20Statistical%20Hypothesis%20testing/statistical_tests.ipynb)
 
   - A tutorial to show a few commonly used hypothesis tests used in Statistics.  
