@@ -1,0 +1,97 @@
+---
+title: "K means clustering"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+### Introduction
+
+K-means clustering is an unsupervised machine learning algorithm which involves the partitioning of n observations into k clusters in which each observation belongs to the cluster with the nearest mean (cluster centers or cluster centroid), serving as a prototype of the cluster.
+
+In other words, the K-means algorithm identifies k number of centroids, and then allocates every data point to the nearest cluster, while keeping the number of centroids as small as possible.
+
+### Exploring dataset
+
+The dataset we are going to use here is quite a famous one i.e. the iris dataset. Let us first explore the iris dataset.
+
+```{r}
+library(ggplot2)
+
+head(iris)
+str(iris)
+
+```
+
+Here, we are interested in clustering the iris dataset based on the species. So, let us plot the petal length vs width of all the species in the iris dataset. 
+
+```{r}
+ggplot(iris, aes(Petal.Length, Petal.Width)) + geom_point(aes(col=Species), size=4)
+```
+
+### Performing k-means clustering
+
+We can clearly see that setosa is going to be clustered easier. Meanwhile, there is noise between versicolor and virginica even when they look like perfectly clustered.
+
+Now, let’s run the model. To use the kmeans, we don't need to install any package as it already comes in the base package from R. 
+
+In the kmeans function, it is necessary to set center, which is the number of groups we want to cluster to. In this case, we know this value will be 3.
+
+```{r}
+
+set.seed(100)
+irisCluster <- kmeans(iris[,1:4], center=3, nstart=20)
+irisCluster
+```
+
+### Finding out the ideal value for k
+
+To find out the best value of k, we can use the tot.withinss i.e. the total within-cluster sum of squares. The following code calculates the tot.withinss score for different values of k between 1 and 10. 
+
+```{r}
+
+tot.withinss <- vector(mode="character", length=10)
+
+for (i in 1:10){
+  irisCluster <- kmeans(iris[,1:4], center=i, nstart=20)
+  tot.withinss[i] <- irisCluster$tot.withinss
+}
+
+```
+
+Let's visualise the plot of tot.withinss for different k values. 
+
+```{r}
+
+plot(1:10, tot.withinss, type="b", pch=19)
+```
+
+Here, we can clearly observe the __elbow point__ as 3. Therefore, we take k(centers) as 3. 
+
+### Comparing the predicted clusters with the original data. 
+
+After we predict the clusters in the iris data with k = 3, let us compare the predictions with the original data. 
+
+```{r}
+
+irisCluster <- kmeans(iris[,1:4], center=3, nstart=20)
+
+table(irisCluster$cluster, iris$Species)
+
+```
+
+We can also plot the predicted clusters as follows.
+
+```{r}
+
+library(cluster)
+clusplot(iris, irisCluster$cluster, color=T, shade=T, labels=0, lines=0)
+```
+
+### Disadvantages of k-means clustering
+
+Initialization of the cluster center is a really crucial part. Suppose you have three clusters and you put two centroids in the same cluster and the other one in the last cluster. Somehow, k-means clustering minimizes the Euclidean distance for all the data points in the cluster and it will become stable, so actually, there are two centroids in one cluster and the third one has one centroid. In this case, you end up having only two clusters. This is called the local minimum problem in clustering.
+
+
