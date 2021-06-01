@@ -1,0 +1,122 @@
+---
+title: "Simple Linear Regression"
+output:
+  html_document: default
+  pdf_document: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+### Introduction
+
+We will use R to perform a simple linear regression on a `toy dataset`. This will teach you how to use the R regression commands, and also give you a little insight into how certain data values can cause problems for least-squares. We will also demonstrate the basics of using the `lm()` function and the predict function to perform least-squares regression. 
+
+### Loading the data
+
+Load the data file `toydata.csv` into R (store it in the dataframe `df`), and plot the variable `df$y` against the variable `df$x`.
+
+
+```{r}
+df <- read.csv("toydata.csv")
+plot(df$X, df$y, xlab="X", ylab="y")
+```
+
+### Fitting a model
+
+We would like to fit a linear model to this data, using `X` as our predictor and `y` as our target, i.e., we would like predict `y` using `X`. To do this we can use the `lm()` function, which fits a linear model using least squares. Use the command __lm(y ~ X, data=df)__ to perform the fit. The `y~X` says to model `y` using `X` as a predictor. What do the estimated values of the intercept and regression coefficient tell you about the relationship between `y` and `X`?
+
+
+```{r}
+lm(y~X,data=df)
+# when x = 0, the predicted value of y is -0.1883
+# for every unit increase in x, the predicted value of y increases by 1.1035
+```
+
+###  Exploring the fit
+
+We can actually store the results of the fitting process into an object -- this lets us get access to a lot more information. To do this, use __fit <- lm(y ~ X, data=df)__ which stores the fitted model in `fit`. To view the results of the fitting procedure, and a number of statistics associated with the fitted model, use the `summary()` function on the object `fit`. Does the $p$-value for the regression coefficient suggest that it is a significantly associated with our target `y`?
+
+```{r}
+fit <- lm(y~X,data=df)
+summary(fit)
+# p-value is 0.0019, which is strong evidence against the null that beta_1 = 0;
+# so very likely that X is associated with y 
+```
+
+### Making predictions
+
+Another advantage of storing the fitted model in an object is that we can use it to make predictions, either on new data, or on the data we have fitted on. We can use this to see how well our model fitted the data. First, write down the fitted linear equation for predicting `y` in terms of `X` as estimated above. You could use the coefficients from the fitted linear model `fit` to make predictions, i.e.,
+
+$$\hat{y} = fit\$coefficients[[1]] + fit\$coefficients[[2]]*df\$X$$ The coefficients variable in the `fit` object contains the coefficients, and by convention in R, the intercept is always the first element of the list.	
+
+R also provides a function to make predictions using our model; this is called the `predict()` function, and we can call it using $\hat{y}_{pred} = predict(fit, df)$. The first argument is a linear model to use to predict; the second argument is a dataframe from which to get the values of the predictors. This can be a dataframe containing new data (different from the data we used to predict) but it must have the same predictors (i.e., same column names) as the data we used to fit the model in the first place. Compare the predictions produced by the two methods -- they should be the same.
+	
+To see how well our model fitted the data, plot the predictions against `df$X` using the `lines()` function. How good does the line fit the data?
+
+
+
+```{r}
+yhat <- fit$coefficients[[1]] + fit$coefficients[[2]] * df$X
+yhat
+
+yhat <- predict(fit, df)
+yhat
+
+plot(df$y ~ df$X)
+lines(df$X, yhat, lwd=2)
+
+# the fit is decent but the last data-point seems to be fitted quite poorly by the line
+```
+
+### Adjusting for an outlier
+	
+The data point when $x = 10$ is quite far away from the rest of the datapoints, and it seems to have "dragged'' our fitted line away from passing through the bulk of the other $9$ data points. A data point that is quite far away from the other data points is called an __outlier__. One weakness of the least-squares procedure is that it is based on minimising the sum of squared errors, which is very sensitive to large deviations; so outliers can have a very large effect on the fitted line, and the LS procedure will overadjust the line to fit the outliers at the expense of the rest of the data which is more closely clustered together.
+
+Let us see how our fitted line changes if we do not use this potential outlying point. To do this we can fit our linear model using all but the last datapoint; the `lm()` function allows for this through the use of the `subset` option; e.g.,  __fit2 <- lm(y ~ X, data=df, subset=1:9)__.
+
+Use `summary()` to view the statistics for this new fit. How much has removing this data point changed the estimates, the $p$-value for the regression coefficient and the $R^2$ value? Does this support the belief that this data point may be an "outlier''?
+
+```{r}
+fit2 <- lm(y ~ X, data=df, subset=1:9)
+summary(fit2)
+
+# The estimate for beta_1 changes from 1.1035 to 1.4934 which is a change of 35%. This is quite considerable
+# The p-value drops to 4 x 10^-6 which is much smaller than before (1.9 * 10^-3)
+# The R^2 increases from 0.7193 to 0.9588. This is a very large increase in goodness-of-fit
+# It certainly seems that removing this datapoint means the simple linear model fits the remaining
+# data points a lot better.
+```
+
+### Comparing predictions
+	
+Compute predictions for all $10$ datapoints in your dataframe 'df' using the model fitted without the outlier datapoint, and plot them using the `lines()` function. How do the two fitted lines differ?
+	
+
+```{r}
+yhat2 <- predict(fit2, df)
+plot(df$y ~ df$X)
+lines(df$X, yhat2, lwd=2, col="red")
+# We now see that the red line passes much more closely through the first 9 data points, but is even worse
+# at predicting the 10th (as we did not include it in our fit). We would probably do well to treat
+# this data point as seperate from our model.
+
+```
+
+Another metric to evaulate the performance of a model is the mean squared-prediction error (MSPE). The smaller the error the better the model fit, with an error of zero being a perfect prediction.
+
+We calculate the `mspe` for both `yhat` and `yhat2` below.  
+
+```{r}
+
+mean((df$y - yhat)^2)
+mean((df$y - yhat2)^2)
+
+# We see that the model trained with the outlier has a lower error than the one with the outlier removed.
+# This tells us that lowering the error does not always lead to a better model and it is very essential to identify and remove outliers. 
+```
+
+
+
