@@ -22,7 +22,7 @@ Statistics is the foundation of Data Science and the concepts involved in statis
 
 <hr>
 
-## [Understanding Gradient Descent](https://github.com/SuvanshVaid27/Gradient-Descent-demo/blob/main/Gradient%20Descent.ipynb)
+## [Understanding Gradient Descent](https://github.com/SuvanshVaid27/STATISTICAL-MODELLING/blob/main/Gradient-Descent-demo/Gradient%20Descent.ipynb)
 
   - A demonstration of how the widely used Gradient Descent algorithm works using a simple example in Python.
 
