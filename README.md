@@ -16,7 +16,7 @@ Statistics is the foundation of Data Science and the concepts involved in statis
 
 <hr>
 
-## [Understanding Central Limit Theorem](https://github.com/SuvanshVaid27/central-limit-theorem)
+## [Understanding Central Limit Theorem](https://github.com/SuvanshVaid27/STATISTICAL-MODELLING/tree/main/central-limit-theorem)
 
   - A demonstration of the central limit theorem (for sample means) in R shiny. Follow the link to see the R shiny app: http://suvanshvaid27.shinyapps.io/central-limit-theorem/
 
