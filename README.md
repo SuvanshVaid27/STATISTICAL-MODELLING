@@ -2,7 +2,7 @@
 
 Statistics is the foundation of Data Science and the concepts involved in statistics help provide insights into the data to perform quantitative analysis on it. As an aspiring Data Scientist, I consider it extremely essential to master the statistical concepts so that I am able to effectively connect the numbers with the probing questions. Below, I've shown a few demos of concepts related to statistics and machine learning. 
 
-## [Linear Regression tutorial](https://github.com/SuvanshVaid27/Simple-Linear-Regression-in-R)
+## [Linear Regression tutorial](https://github.com/SuvanshVaid27/STATISTICAL-MODELLING/tree/main/Simple-Linear-Regression-in-R)
 
   - A demonstration of how to use simple linear regression in R using the toydataset. Follow the link to check out the project: https://rpubs.com/SuvanshVaid27/simple-linear-regression
 
