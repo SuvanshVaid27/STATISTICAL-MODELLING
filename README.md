@@ -8,7 +8,7 @@ Statistics is the foundation of Data Science and the concepts involved in statis
 
 <hr>
 
-## [K-means clustering tutorial on the iris dataset](https://github.com/SuvanshVaid27/K-Means-Clustering-in-R): 
+## [K-means clustering tutorial on the iris dataset](https://github.com/SuvanshVaid27/STATISTICAL-MODELLING/tree/main/K-Means-Clustering-in-R): 
 
   - A simple demonstration of k means clustering on the iris dataset in R. Follow the link to check out the project: https://rpubs.com/SuvanshVaid27/k-means-clustering
 
